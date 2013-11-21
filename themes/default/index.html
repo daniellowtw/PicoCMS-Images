@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_title }}</title>
+    {% if meta.description %}
+    <meta name="description" content="{{ meta.description }}">{% endif %}{% if meta.robots %}
+    <meta name="robots" content="{{ meta.robots }}">{% endif %}
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css" />
+    <link rel="stylesheet" href="{{ theme_url }}/style.css" type="text/css" />
+    <script src="{{ theme_url }}/scripts/modernizr-2.6.1.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="{{base_url}}/source/jquery.swipebox.min.js"></script>
+    <link rel="stylesheet" href="{{base_url}}/source/swipebox.css" type="text/css" />
+</head>
+
+<body>
+
+    <header id="header">
+        <div class="inner clearfix">
+            <h1><a href="{{ base_url }}">{{ site_title }}</a>
+            </h1>
+            <ul class="nav">
+                {% for page in pages %} 
+                {% if (page.type == 'Categories') %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a>
+                </li>
+                {% endif %} 
+                {% endfor %}
+            </ul>
+        </div>
+    </header>
+
+
+    <section id="content">
+        <div class="inner">
+            
+{% if is_front_page %} <!-- Front page lists all blog posts -->
+	<p>The following are my note entries from all category in reverse chronological order.</p>
+	<div id="posts">
+	{% for page in pages %}
+		{% if page.date %} <!-- Note we check for Date field (posts) here -->
+		<div class="post">
+			<h3><a href="{{ page.url }}">{{ page.title }}</a></h3>
+			<p class="meta">{{ page.date_formatted }}</p>
+			<p class="excerpt">{{ page.excerpt }}</p>
+		</div>
+		{% endif %}
+	{% endfor %}
+	</div>
+
+{% elseif (meta.type == 'Categories') %} 
+<!-- Else if it's a category page, give a blog posts format for those categories only -->
+    <p>The following are my note entries from <b>{{meta.category}}</b> in reverse chronological order.</p>
+
+	<div id="posts">
+	{% for page in pages %}
+		{% if page.category == meta.category %} <!-- Note we check for Date field (posts) here -->
+		{% if page.date %} <!-- Note we check for Date field (posts) here -->
+		<div class="post">
+			<h3><a href="{{ page.url }}">{{ page.title }}</a></h3>
+			<p class="meta">{{ page.date_formatted }}</p>
+			<p class="excerpt">{{ page.excerpt }}</p>
+		</div>
+		{% endif %}
+		{% endif %}
+	{% endfor %}
+	</div>
+
+{% else %} <!-- Single page shows individual blog post -->
+
+	<div class="post">
+		{% if meta.title %}<h2>{{ meta.title }}</h2>{% endif %}
+		<p class="meta">{{ meta.date_formatted }}</p>
+		{{ content }}
+    </div>
+
+    {% if have_images %}
+        <div class="photos">
+            <h1>Photos</h1>
+            <section id="gallery" class="clearfix">
+            {% for image in images %}
+            <div class="box">
+            <a href="{{image.url}}" class="swipebox">
+                <img src="{{image.url}}" alt="image">
+            </a>
+            </div>
+            {% endfor %}
+            </section>
+        </div>
+    {% endif %}
+
+{% endif %}
+
+        </div>
+    </section>
+
+    <footer id="footer">
+        <div class="inner">
+            <a href="http://pico.dev7studios.com">Pico</a> was made by <a href="http://gilbert.pellegrom.me">Gilbert Pellegrom</a> from <a href="http://dev7studios.com">Dev7studios</a>.
+        </div>
+    </footer>
+
+<script type="text/javascript">
+jQuery(function($) {
+    $(".swipebox").swipebox();
+});
+
+
+</script>
+</body>
+
+</html>
+
